@@ -1,13 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import datetime
+from foods.models import Menu
+
+
 
 def index(request):
-  today = datetime.today().date()
-  context = {"date": today}
-  
-  return render(request, 'foods/index.html', context=context)
+    context = dict()
+    today = datetime.today().date()
+    menus = Menu.objects.all()
+    context["date"] = today
+    context["menus"] = menus
+    return render(request, 'foods/index.html', context=context)
 
-def food_detail(request, food):
-  context = {"name": food}
-  return render(request, 'foods/detail.html', context=context)
+def food_detail(request, pk):
+    context = dict()
+    menu = Menu.objects.get(id=pk)
+    context["menu"] = menu
+    
+    return render(request, 'foods/detail.html', context=context)
